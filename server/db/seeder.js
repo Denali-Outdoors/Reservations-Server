@@ -12,7 +12,7 @@ const insertRecords = () => {
       for (let i = 0; i < restaurantCount; i++) {
         db.queryAsync(`INSERT INTO restaurants (name, max_seats) 
         VALUES ('${faker.company.companyName()}', ${faker.random.number({min: 10, max: 30})});`,
-        (err) => {if (err) {console.log(err.sqlMessage) }}) // ERRORCOUNT DOES NOT INCREMENT
+        (err) => {if (err) {  /* console.log(err.sqlMessage) */ }}) // errors will generate for 3-4% of restaurant insertions, ignoring
       }
     })
     .then(() => {
