@@ -8,7 +8,7 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "add-test-records": "node ./server/db/seeder.js"
+    "seed": "node ./server/db/seeder.js"
   },
   "dependencies": {
     "bluebird": "^3.7.2",
