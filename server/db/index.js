@@ -2,7 +2,8 @@ const mysql = require('mysql');
 
 const connection = mysql.createConnection({
     user: 'root',
-    password: 'delfinka12'
+    password: 'delfinka12',
+    database: 'reservations_db'
 });
 
 connection.connect((err) => {
@@ -11,7 +12,7 @@ connection.connect((err) => {
       return;
     }
     console.log(`Connected to MySQL Server as ID: ${connection.threadId}`);
-  });
+});
 
 // connection.end(err => {
 //     if (err) {
@@ -21,4 +22,4 @@ connection.connect((err) => {
 //     }
 // });
 
-module.exports.db = connection;
+module.exports = connection;
