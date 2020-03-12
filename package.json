@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "reservations-server",
   "version": "",
   "description": "",
   "author": "",
@@ -9,9 +9,12 @@
   },
   "scripts": {},
   "dependencies": {
+    "bluebird": "^3.7.2",
+    "express": "^4.17.1",
     "mysql": "^2.18.1"
   },
   "devDependencies": {
-    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor"
+    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
+    "faker": "^4.1.0"
   }
 }
