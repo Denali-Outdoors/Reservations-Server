@@ -6,7 +6,7 @@ module.exports = (db) => {
     .then(() => {
       db.queryAsync(`CREATE TABLE restaurants (
         id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(30),
+        name VARCHAR(40),
         max_seats INTEGER);`)
     })
     .then(() => {
