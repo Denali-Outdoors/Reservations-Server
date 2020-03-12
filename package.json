@@ -7,7 +7,9 @@
   "engines": {
     "node": ">=6.13.0"
   },
-  "scripts": {},
+  "scripts": {
+    "add-test-records": "node ./server/db/seeder.js"
+  },
   "dependencies": {
     "bluebird": "^3.7.2",
     "express": "^4.17.1",
