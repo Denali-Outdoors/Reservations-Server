@@ -16,7 +16,7 @@ RANDOM DATE GENERATION UTILITIES
 
 const getRandomMonth = () => {
   // first, generate random dates in MySQL friendly format ('yyyy-mm-dd hh:mm:ss')
-  const randomMonth = faker.random.number({ min: 2, max: 3 }).toString();
+  const randomMonth = faker.random.number({ min: 3, max: 4 }).toString();
   if (randomMonth.length === 1) {
     return `0${randomMonth}`; // ENSURES THAT NO SINGLE-DIGIT NUMBERS ARE PASSED TO DATE STRING (MYSQL ERRORS)
   }
@@ -62,7 +62,7 @@ const insertRecords = () => {
         const randomMinutes = getRandomMinutes();
         const date = `2020-${randomMonth}-${randomDay} ${randomHour}:${randomMinutes}:00`;
 
-        db.queryAsync(`INSERT INTO reservations (id_restaurants, party_size, date_time) 
+        db.queryAsync(`INSERT INTO reservations (id_restaurants, party_size, date_time)
         VALUES (${faker.random.number({ min: 1, max: 95 })}, ${faker.random.number({ min: 2, max: 10 })}, '${date}');`, // IF CHANGING NUMBER OF RESTAURANTS, CHANGE id_restaurants VALUE
         (err) => { if (err) { console.log(err.sqlMessage); } });
       }
