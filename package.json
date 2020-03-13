@@ -15,7 +15,8 @@
     "bluebird": "^3.7.2",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
