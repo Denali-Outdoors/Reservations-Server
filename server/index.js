@@ -13,14 +13,20 @@ app.listen(PORT, (err) => {
   }
 })
 
-app.get('/reservations/:restaurantID', (req, res) => {
-  console.log(`GET /reservations/${req.params.restaurantID}`);
+app.get('/reservations/:restaurantID/:partySize', (req, res) => {
+  console.log(`GET /reservations/${req.params.restaurantID}/${req.params.partySize}`);
   model.getReservations(req.params.restaurantID, (err, results) => {
     if (err) {
       console.log('Error: ', err);
       res.status(400).send('Data could not be retrieved');
     } else {
-      res.status(200).send(results);
+      // FIND UNAVAILABLE DATE-TIMES
+      var availability = results.map(dateTime => {
+        return { ...dateTime, available: dateTime.capacity - dateTime.occupied - req.params.partySize > 0};
+        })
+        .filter(dateTime => dateTime.available === false);
+
+      res.status(200).send(availability);
     }
   });
 })
