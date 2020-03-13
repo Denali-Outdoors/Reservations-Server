@@ -14,9 +14,9 @@ const restaurantCount = 100; // WILL DETERMINE THE NUMBER OF RESTAURANT RECORDS 
 RANDOM DATE GENERATION UTILITIES
 */
 
-const getRandomMonth = (min, max) => {
+const getRandomMonth = () => {
   // first, generate random dates in MySQL friendly format ('yyyy-mm-dd hh:mm:ss')
-  const randomMonth = faker.random.number({ min, max }).toString();
+  const randomMonth = faker.random.number({ min: 2, max: 3 }).toString();
   if (randomMonth.length === 1) {
     return `0${randomMonth}`; // ENSURES THAT NO SINGLE-DIGIT NUMBERS ARE PASSED TO DATE STRING (MYSQL ERRORS)
   }
