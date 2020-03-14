@@ -1,24 +1,13 @@
-/* eslint-disable */
+/* eslint-disable no-undef */
+
 import React from 'react';
 import { mount, shallow } from 'enzyme';
+import App from '../client/src/components/App';
+import Calendar from '../client/src/components/Calendar';
 
-function Fixture() {
-  return (
-    <div>
-      <input id="checked" defaultChecked />
-      <input id="not" defaultChecked={false} />
-      <input id="tertiary" defaultChecked checked={false} />
-    </div>
-  );
-}
-
- // mount/render/shallow when applicable
-
- 
-describe('<Fixture />', () => {
-  it('assert checked', () => {
-    const wrapper = mount(<Fixture />);
-    expect(wrapper.find('#checked')).toBeChecked();
-    expect(wrapper.find('#not')).not.toBeChecked();
+describe('<App />', () => {
+  it('should render one Calendar component', () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.find(Calendar)).toHaveLength(1);
   });
-})
+});
