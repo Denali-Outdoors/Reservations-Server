@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1584466247313" clover="3.2.0">
+  <project timestamp="1584466247313" name="All files">
+    <metrics statements="15" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="6" elements="22" coveredelements="20" complexity="0" loc="15" ncloc="15" packages="1" files="7" classes="7"/>
+    <file name="App.jsx" path="/home/rory/repos/reservations-server/client/src/components/App.jsx">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="9" count="1" type="stmt"/>
+    </file>
+    <file name="Calendar.jsx" path="/home/rory/repos/reservations-server/client/src/components/Calendar.jsx">
+      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="6" count="1" type="stmt"/>
+    </file>
+    <file name="DateSelector.jsx" path="/home/rory/repos/reservations-server/client/src/components/DateSelector.jsx">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="4" count="1" type="stmt"/>
+      <line num="5" count="1" type="stmt"/>
+    </file>
+    <file name="PartySelector.jsx" path="/home/rory/repos/reservations-server/client/src/components/PartySelector.jsx">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="1" type="stmt"/>
+    </file>
+    <file name="ReserveButton.jsx" path="/home/rory/repos/reservations-server/client/src/components/ReserveButton.jsx">
+      <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="0" type="stmt"/>
+    </file>
+    <file name="TimeSelector.jsx" path="/home/rory/repos/reservations-server/client/src/components/TimeSelector.jsx">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="1" type="stmt"/>
+    </file>
+    <file name="Title.jsx" path="/home/rory/repos/reservations-server/client/src/components/Title.jsx">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>
