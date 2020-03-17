@@ -41,7 +41,7 @@ describe('<App />', () => {
   *****    TEST TITLE     *****
 */
 
-xdescribe('<Title />', () => {
+describe('<Title />', () => {
   const component = render(<Title />);
   it('should render the title "Make a Reservation"', () => {
     expect(component.find('[data-test="title"]').text()).toBe('Make a Reservation');
