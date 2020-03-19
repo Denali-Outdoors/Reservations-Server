@@ -16,11 +16,11 @@ const SelectWrapper = styled.select`
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 `;
 
-const ImgWrapper = styled.svg`
-  position: absolute;
-  top: 3px;
-  left: 3px;
-`;
+// const ImgWrapper = styled.svg`
+//   position: absolute;
+//   top: 3px;
+//   left: 3px;
+// `;
 
 const TimeSelector = ({ timeOptions, setSelectedTime }) => (
   <TimeSelectorWrapper>
