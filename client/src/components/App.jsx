@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import ReservationsProvider from '../contexts/ReservationsContext';
 import Title from './Title';
 import DateSelector from './DateSelector';
 import TimeSelector from './TimeSelector';
@@ -17,13 +18,15 @@ const AppWrapper = styled.div`
 `;
 
 const App = ({timeOptions}) => (
-  <AppWrapper>
-    <Title />
-    <DateSelector />
-    <TimeSelector timeOptions={timeOptions} />
-    <PartySelector />
-    <ReserveButton />
-  </AppWrapper>
+  <ReservationsProvider>
+    <AppWrapper>
+      <Title />
+      <DateSelector />
+      <TimeSelector timeOptions={timeOptions} />
+      <PartySelector />
+      <ReserveButton />
+    </AppWrapper>
+  </ReservationsProvider>
 );
 
 export default App;
