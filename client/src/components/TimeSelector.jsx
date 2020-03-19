@@ -16,32 +16,28 @@ const SelectWrapper = styled.select`
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 `;
 
-const ImgWrapper = styled.img`
+const ImgWrapper = styled.svg`
   position: absolute;
   top: 3px;
   left: 3px;
 `;
 
-const TimeSelector = ({ selectedTime, timeOptions }) => {
-  // const [reservations, setReservations] = useContext(ReservationsContext);
-  return (
-    <TimeSelectorWrapper>
-      <SelectWrapper value={selectedTime} >
-        {timeOptions.map((time) => (<option key={time} >{time}</option>))}
-      </SelectWrapper>
-    </TimeSelectorWrapper>
-  );
-};
-
+const TimeSelector = ({ timeOptions, setSelectedTime }) => (
+  <TimeSelectorWrapper>
+    <SelectWrapper onChange={(e) => { e.preventDefault(); setSelectedTime(e.target.value); }}>
+      {timeOptions.map((time) => (<option key={time}>{time}</option>))}
+    </SelectWrapper>
+  </TimeSelectorWrapper>
+);
 
 TimeSelector.propTypes = {
-  selectedTime: PropTypes.string,
   timeOptions: PropTypes.arrayOf(PropTypes.string),
+  setSelectedTime: PropTypes.func,
 };
 
 TimeSelector.defaultProps = {
-  selectedTime: new Date().toLocaleTimeString(),
   timeOptions: [],
+  setSelectedTime: () => {},
 };
 // https://fecreservations.s3-us-west-1.amazonaws.com/clock.png
 
