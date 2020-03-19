@@ -18,9 +18,10 @@ const SelectWrapper = styled.select`
 `;
 
 
-const PartySelector = () => (
+const PartySelector = ({ setSelectedPartySize }) => (
   <PartySelectorWrapper>
-    <SelectWrapper>
+    {/* eslint-disable-next-line max-len */}
+    <SelectWrapper onChange={(e) => { e.preventDefault(); setSelectedPartySize(parseInt(e.target.value.substring(0, 1), 0)); }}>
       <option>1 person</option>
       <option>2 people</option>
       <option>3 people</option>
