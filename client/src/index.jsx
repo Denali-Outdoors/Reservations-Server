@@ -12,12 +12,12 @@ const addTimeOptions = () => {
   if (hour === 11 && isAfterNoon) {
     return;
   }
-  timeOptions.push(`${hour}:${minutes} ${isAfterNoon ? 'pm' : 'am'}`);
-  minutes = minutes === '30' ? '00' : '30';
-  timeOptions.push(`${hour}:${minutes} ${isAfterNoon ? 'pm' : 'am'}`);
-  minutes = minutes === '30' ? '00' : '30';
-  hour += 1;
   isAfterNoon = !isAfterNoon && hour === 12 ? !isAfterNoon : isAfterNoon;
+  timeOptions.push(`${hour}:${minutes} ${isAfterNoon ? 'pm' : 'am'}`);
+  minutes = minutes === '30' ? '00' : '30';
+  timeOptions.push(`${hour}:${minutes} ${isAfterNoon ? 'pm' : 'am'}`);
+  minutes = minutes === '30' ? '00' : '30';
+  hour = isAfterNoon && hour === 12 ? 1 : hour += 1;
   addTimeOptions();
 };
 
