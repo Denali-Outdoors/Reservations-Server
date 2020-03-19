@@ -84,7 +84,7 @@ class App extends React.Component {
         <Title />
         <DateSelector />
         <TimeSelector timeOptions={this.state.timeOptions} setSelectedTime={this.setSelectedTime} />
-        <PartySelector />
+        <PartySelector setSelectedPartySize={this.setSelectedPartySize} />
         <ReserveButton />
       </AppWrapper>
     );
