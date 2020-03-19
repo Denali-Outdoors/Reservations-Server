@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import Title from './Title';
 import DateSelector from './DateSelector';
@@ -100,5 +101,18 @@ class App extends React.Component {
     );
   }
 }
+
+App.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  newDate: PropTypes.object, /* Should be a Date object */
+  allMonths: PropTypes.arrayOf(PropTypes.string),
+  allDaysOfWeek: PropTypes.arrayOf(PropTypes.string),
+};
+
+App.defaultProps = {
+  newDate: new Date(),
+  allMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+  allDaysOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+};
 
 export default App;
