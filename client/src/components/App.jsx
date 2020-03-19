@@ -41,10 +41,51 @@ class App extends React.Component {
       selectedTime: newDate.toLocaleTimeString('en-US'),
       selectedPartySize: 2,
     };
+
+    this.getTimeOptions = this.getTimeOptions.bind(this);
+    this.setTimeOptions = this.setTimeOptions.bind(this);
+    this.setSelectedTime = this.setSelectedTime.bind(this);
+    this.setSelectedPartySize = this.setSelectedPartySize.bind(this);
   }
 
-  static getTimeOptions(date, time) {
+  componentDidMount(time = this.props.newDate.toLocaleTimeString('en-US')) {
+    this.setTimeOptions(time);
+  }
 
+  setTimeOptions(time = this.selectedTime) {
+    const newTimeOptions = this.getTimeOptions(time);
+    this.setState((state) => ({ ...state, timeOptions: newTimeOptions }));
+  }
+
+  setSelectedTime(time) {
+    this.setState((state) => ({ ...state, selectedTime: time }));
+  }
+
+  setSelectedPartySize(num) {
+    this.setState((state) => ({ ...state, selectedPartySize: num }));
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getTimeOptions(time) {
+    let hour = parseInt(time.substring(0, time.indexOf(':')), 0);
+    let minutes = parseInt(time.substring(time.indexOf(':'), time.lastIndexOf(':')), 0) > 30 ? '30' : '00';
+    const amPM = time.slice(-2);
+    let isAfterNoon = amPM === 'PM' || amPM === 'pm';
+    const timeOptions = [];
+    const addTimeOptions = () => {
+      if (hour === 11 && isAfterNoon) {
+        return;
+      }
+      isAfterNoon = !isAfterNoon && hour === 12 ? !isAfterNoon : isAfterNoon;
+      timeOptions.push(`${hour}:${minutes} ${isAfterNoon ? 'pm' : 'am'}`);
+      minutes = minutes === '30' ? '00' : '30';
+      timeOptions.push(`${hour}:${minutes} ${isAfterNoon ? 'pm' : 'am'}`);
+      minutes = minutes === '30' ? '00' : '30';
+      hour = isAfterNoon && hour === 12 ? 1 : hour += 1;
+      addTimeOptions();
+    };
+    addTimeOptions();
+    return timeOptions;
   }
 
   render() {
@@ -52,7 +93,7 @@ class App extends React.Component {
       <AppWrapper>
         <Title />
         <DateSelector />
-        <TimeSelector timeOptions={this.state.timeOptions} />
+        <TimeSelector timeOptions={this.state.timeOptions} setSelectedTime={this.setSelectedTime} />
         <PartySelector />
         <ReserveButton />
       </AppWrapper>
