@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const PartySelectorWrapper = styled.div`
   display: inline-block;
@@ -29,5 +30,13 @@ const PartySelector = () => (
     </SelectWrapper>
   </PartySelectorWrapper>
 );
+
+PartySelector.propTypes = {
+  setSelectedPartySize: PropTypes.func,
+};
+
+PartySelector.defaultProps = {
+  setSelectedPartySize: () => {},
+};
 
 export default PartySelector;
