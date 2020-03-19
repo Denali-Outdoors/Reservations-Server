@@ -21,10 +21,8 @@ const ButtonWrapper = styled.button`
   }
 `;
 
-const ReserveButton = () => {
-  return (
-    <ButtonWrapper>Find a Table</ButtonWrapper>
-  );
-};
+const ReserveButton = ({ postReservation }) => (
+  <ButtonWrapper onClick={postReservation}>Find a Table</ButtonWrapper>
+);
 
 export default ReserveButton;
