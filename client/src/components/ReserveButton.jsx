@@ -11,9 +11,13 @@ const ButtonWrapper = styled.button`
   border-radius: 3px;
   border: 1px solid #d32323;
   border-radius: 3px;
-  
+  cursor: pointer;
   color: white;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  transition: 0.6s;
+  :hover {
+    opacity: 0.8;
+  }
 `;
 
 const ReserveButton = () => (
