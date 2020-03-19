@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const PartySelectorWrapper = styled.div`
   display: inline-block;
@@ -17,21 +18,26 @@ const SelectWrapper = styled.select`
 `;
 
 
-const PartySelector = () => {
-  const [ partySize, setPartySize ] = useState(2);
-  return (
-    <PartySelectorWrapper>
-      <SelectWrapper>
-        <option>1 person</option>
-        <option>2 people</option>
-        <option>3 people</option>
-        <option>4 people</option>
-        <option>5 people</option>
-        <option>6 people</option>
-      </SelectWrapper>
-    </PartySelectorWrapper>
-  );
+const PartySelector = ({ setSelectedPartySize }) => (
+  <PartySelectorWrapper>
+    {/* eslint-disable-next-line max-len */}
+    <SelectWrapper onChange={(e) => { e.preventDefault(); setSelectedPartySize(parseInt(e.target.value.substring(0, 1), 0)); }}>
+      <option>1 person</option>
+      <option>2 people</option>
+      <option>3 people</option>
+      <option>4 people</option>
+      <option>5 people</option>
+      <option>6 people</option>
+    </SelectWrapper>
+  </PartySelectorWrapper>
+);
+
+PartySelector.propTypes = {
+  setSelectedPartySize: PropTypes.func,
 };
-// https://fecreservations.s3-us-west-1.amazonaws.com/party.png
+
+PartySelector.defaultProps = {
+  setSelectedPartySize: () => {},
+};
 
 export default PartySelector;

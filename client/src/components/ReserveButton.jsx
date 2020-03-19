@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const ButtonWrapper = styled.button`
   background-color: #d32323;
@@ -20,8 +21,16 @@ const ButtonWrapper = styled.button`
   }
 `;
 
-const ReserveButton = () => (
-  <ButtonWrapper>Find a Table</ButtonWrapper>
+const ReserveButton = ({ postReservation }) => (
+  <ButtonWrapper onClick={postReservation}>Find a Table</ButtonWrapper>
 );
+
+ReserveButton.propTypes = {
+  postReservation: PropTypes.func,
+};
+
+ReserveButton.defaultProps = {
+  postReservation: () => {},
+};
 
 export default ReserveButton;

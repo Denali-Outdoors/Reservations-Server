@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 const TimeSelectorWrapper = styled.div`
   display: inline-block;
@@ -16,30 +16,29 @@ const SelectWrapper = styled.select`
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 `;
 
-const ImgWrapper = styled.img`
-  position: absolute;
-  top: 3px;
-  left: 3px;
-`;
+// const ImgWrapper = styled.svg`
+//   position: absolute;
+//   top: 3px;
+//   left: 3px;
+// `;
 
-const TimeSelector = ({ timeOptions }) => (
+const TimeSelector = ({ timeOptions, setSelectedTime }) => (
   <TimeSelectorWrapper>
-    {/* <ImgWrapper src="../assets/clock.png" /> */}
-    <SelectWrapper>
-      {/* eslint-disable-next-line react/prop-types */}
+    <SelectWrapper onChange={(e) => { e.preventDefault(); setSelectedTime(e.target.value); }}>
       {timeOptions.map((time) => (<option key={time}>{time}</option>))}
     </SelectWrapper>
   </TimeSelectorWrapper>
 );
 
+TimeSelector.propTypes = {
+  timeOptions: PropTypes.arrayOf(PropTypes.string),
+  setSelectedTime: PropTypes.func,
+};
 
-// TimeSelector.propTypes = {
-//   timeOptions: PropTypes.arrayOf(PropTypes.string),
-// };
-
-// TimeSelector.defaultProps = {
-//   timeOptions: [],
-// };
+TimeSelector.defaultProps = {
+  timeOptions: [],
+  setSelectedTime: () => {},
+};
 // https://fecreservations.s3-us-west-1.amazonaws.com/clock.png
 
 export default TimeSelector;
