@@ -17,21 +17,17 @@ const SelectWrapper = styled.select`
 `;
 
 
-const PartySelector = () => {
-  const [ partySize, setPartySize ] = useState(2);
-  return (
-    <PartySelectorWrapper>
-      <SelectWrapper>
-        <option>1 person</option>
-        <option>2 people</option>
-        <option>3 people</option>
-        <option>4 people</option>
-        <option>5 people</option>
-        <option>6 people</option>
-      </SelectWrapper>
-    </PartySelectorWrapper>
-  );
-};
-// https://fecreservations.s3-us-west-1.amazonaws.com/party.png
+const PartySelector = () => (
+  <PartySelectorWrapper>
+    <SelectWrapper>
+      <option>1 person</option>
+      <option>2 people</option>
+      <option>3 people</option>
+      <option>4 people</option>
+      <option>5 people</option>
+      <option>6 people</option>
+    </SelectWrapper>
+  </PartySelectorWrapper>
+);
 
 export default PartySelector;
