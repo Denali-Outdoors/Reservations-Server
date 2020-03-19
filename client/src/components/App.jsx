@@ -10,17 +10,17 @@ import ReserveButton from './ReserveButton';
 const AppWrapper = styled.div`
   border: 1px solid #f5f5f5;
   border-radius: 2px;
-  max-height: 146px;
-  max-width: 295px;
+  height: 146px;
+  width: 295px;
   background: white;
-
+  padding-left: 5px;
 `;
 
-const App = () => (
+const App = ({timeOptions}) => (
   <AppWrapper>
     <Title />
     <DateSelector />
-    <TimeSelector />
+    <TimeSelector timeOptions={timeOptions} />
     <PartySelector />
     <ReserveButton />
   </AppWrapper>
