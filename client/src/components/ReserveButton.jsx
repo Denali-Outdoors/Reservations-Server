@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { ReservationsContext } from '../contexts/ReservationsContext';
 
 const ButtonWrapper = styled.button`
   background-color: #d32323;
@@ -20,8 +21,10 @@ const ButtonWrapper = styled.button`
   }
 `;
 
-const ReserveButton = () => (
-  <ButtonWrapper>Find a Table</ButtonWrapper>
-);
+const ReserveButton = () => {
+  return (
+    <ButtonWrapper>Find a Table</ButtonWrapper>
+  );
+};
 
 export default ReserveButton;
