@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -7,18 +8,6 @@ import DateSelector from './DateSelector';
 import TimeSelector from './TimeSelector';
 import PartySelector from './PartySelector';
 import ReserveButton from './ReserveButton';
-
-/*
-currentDate: newDate,
-months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-daysOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-currentDayOfWeek: outsideDaysOfWeek[newDate.getDay()],
-currentMonth: outsideMonths[newDate.getMonth()],
-selectedDate: newDate,
-selectedTime: newDate.getTime(),
-selectedPartySize: 2,
-*/
-
 
 const AppWrapper = styled.div`
   border: 1px solid #f5f5f5;
