@@ -11,7 +11,7 @@ const SelectWrapper = styled.select`
   height: 30px;
   padding: 5px 24px 5px 30px;
   border-radius: 3px;
-  border-color: #999999;
+  border-color: #cccccc;
   background-color: white;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 `;
