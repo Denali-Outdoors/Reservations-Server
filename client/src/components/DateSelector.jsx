@@ -28,14 +28,14 @@ const today = {
   day: newDate.getDay(),
 };
 
-const DateSelector = () => {
+const DateSelector = ({matrixOfDays}) => {
   const [date, setDate] = useState(today);
   const [calendar, setCalendar] = useState(false);
 
   return (
     <SelectWrapper onClick={() => { setCalendar(!calendar); }}>
       { `${days[date.day]}, ${months[date.month]} ${date.day.toString()}` }
-      { calendar ? <Calendar setDate={setDate} /> : null }
+      { calendar ? <Calendar setDate={setDate} matrixOfDays={matrixOfDays} /> : null }
     </SelectWrapper>
   );
 };
