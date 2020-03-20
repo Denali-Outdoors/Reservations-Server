@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import CalendarHeaders from './CalendarHeaders';
+import Day from './Day';
 
 
 const CalendarWrapper = styled.div`
   position: relative;
   top: 12px;
   right: 35px;
+  width: 293px;
   
   border: 1px solid #cccccc;
   border-radius: 3px;
@@ -49,24 +51,13 @@ const RowWrapper = styled.div`
   border-bottom: 1px solid #cccccc;
 `;
 
-const Day = styled.div`
-  display: table-cell;
-  border-right: 1px solid #cccccc;
-  height: 32px;
-  font-size: 13px;
-  vertical-align: middle;
-  text-align: center;
-  color: #333333;
-`;
-
-const Calendar = ({ matrixOfDays }) => {
-
+const Calendar = ({ selectedDate, setSelectedDate, matrixOfDays }) => {
   return (
     <CalendarWrapper role="grid">
-      <MonthWrapper role="heading">STATIC</MonthWrapper>
+      <MonthWrapper role="heading">{selectedDate.format('MMMM')}</MonthWrapper>
       <TableWrapper role="rowgroup">
         <CalendarHeaders role="row" />
-        {matrixOfDays.map((week) => <RowWrapper role="row">{week.map((day) => <Day role="gridcell" prevMonth={day.prev} nextMonth={!day.prev}>{day.date}</Day>)}</RowWrapper>)}
+        {matrixOfDays.map((week) => (<RowWrapper role="row">{week.map((day) => <Day day={day} setSelectedDate={setSelectedDate} />)}</RowWrapper>))}
       </TableWrapper>
     </CalendarWrapper>
   );
