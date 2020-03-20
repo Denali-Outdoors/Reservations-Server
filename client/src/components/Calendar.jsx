@@ -10,20 +10,31 @@ const CalendarWrapper = styled.div`
   height: 200px;
   width: 293px;
   
-  border: 1px solid #999999;
+  border: 1px solid #cccccc;
   border-radius: 3px;
   background-color: white;
 
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   z-index: 99;
+
+  vertical-align: baseline;
+  box-shadow: 0 1px 2px #0a0a0a33;
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  justify-content: center;
+  border-spacing: 0;
+  border-collapse: collapse;
 `;
 
 const MonthWrapper = styled.h2`
   margin: auto;
   margin-top: 8px;
+  margin-bottom: 5px;
   font-size: 16px;
   color: #333333;
   text-align: center;
+  display: table-caption;
 `;
 
 const TableWrapper = styled.div`
@@ -36,11 +47,12 @@ const TableWrapper = styled.div`
 
 const RowWrapper = styled.div`
   display: table-row;
+  border-bottom: 1px solid #cccccc;
 `;
 
 const Day = styled.div`
   display: table-cell;
-  border: 1px solid #999999;
+  border-right: 1px solid #cccccc;
   height: 32px;
   font-size: 13px;
   vertical-align: middle;
@@ -48,52 +60,14 @@ const Day = styled.div`
   color: #333333;
 `;
 
+const Calendar = ({ matrixOfDays }) => {
 
-const Calendar = () => {
-  // eslint-disable-next-line no-unused-vars
   return (
-    <CalendarWrapper>
-      <MonthWrapper>March 2020</MonthWrapper>
-      <TableWrapper>
-        <CalendarHeaders />
-        <tbody>
-          <RowWrapper>
-            <Day>1</Day>
-            <Day>2</Day>
-            <Day>3</Day>
-            <Day>4</Day>
-            <Day>5</Day>
-            <Day>6</Day>
-            <Day>7</Day>
-          </RowWrapper>
-          <RowWrapper>
-            <Day>8</Day>
-            <Day>9</Day>
-            <Day>10</Day>
-            <Day>11</Day>
-            <Day>12</Day>
-            <Day>13</Day>
-            <Day>14</Day>
-          </RowWrapper>
-          <RowWrapper>
-            <Day>15</Day>
-            <Day>16</Day>
-            <Day>17</Day>
-            <Day>18</Day>
-            <Day>19</Day>
-            <Day>20</Day>
-            <Day>21</Day>
-          </RowWrapper>
-          <RowWrapper>
-            <Day>22</Day>
-            <Day>23</Day>
-            <Day>24</Day>
-            <Day>25</Day>
-            <Day>26</Day>
-            <Day>27</Day>
-            <Day>28</Day>
-          </RowWrapper>
-        </tbody>
+    <CalendarWrapper role="grid">
+      <MonthWrapper role="heading">STATIC</MonthWrapper>
+      <TableWrapper role="rowgroup">
+        <CalendarHeaders role="row" />
+        {matrixOfDays.map((week) => <RowWrapper role="row">{week.map((day) => <Day role="gridcell" prevMonth={day.prev} nextMonth={!day.prev}>{day.date}</Day>)}</RowWrapper>)}
       </TableWrapper>
     </CalendarWrapper>
   );
