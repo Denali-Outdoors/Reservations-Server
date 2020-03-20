@@ -8,8 +8,6 @@ const CalendarWrapper = styled.div`
   position: relative;
   top: 12px;
   right: 35px;
-  height: 200px;
-  width: 293px;
   
   border: 1px solid #cccccc;
   border-radius: 3px;
@@ -18,7 +16,6 @@ const CalendarWrapper = styled.div`
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   z-index: 99;
 
-  vertical-align: baseline;
   box-shadow: 0 1px 2px #0a0a0a33;
   display: flex;
   flex-wrap: wrap;
@@ -32,6 +29,7 @@ const MonthWrapper = styled.h2`
   margin: auto;
   margin-top: 8px;
   margin-bottom: 5px;
+  height: 20px;
   font-size: 16px;
   color: #333333;
   text-align: center;
