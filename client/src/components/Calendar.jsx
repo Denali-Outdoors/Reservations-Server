@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import CalendarHeaders from './CalendarHeaders';
 
 
@@ -71,6 +72,14 @@ const Calendar = ({ matrixOfDays }) => {
       </TableWrapper>
     </CalendarWrapper>
   );
+};
+
+Calendar.propTypes = {
+  matrixOfDays: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
+};
+
+Calendar.defaultProps = {
+  matrixOfDays: [[{}]],
 };
 
 export default Calendar;
