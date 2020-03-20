@@ -2,6 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import Title from './Title';
 import DateSelector from './DateSelector';
@@ -23,12 +24,15 @@ class App extends React.Component {
     super({ newDate, allMonths, allDaysOfWeek });
     this.state = {
       timeOptions: [],
-      months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-      daysOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      currentDayOfWeek: allDaysOfWeek[newDate.getDay()],
-      currentMonth: allMonths[newDate.getMonth()],
-      selectedDate: newDate,
-      selectedTime: newDate.toLocaleTimeString('en-US'),
+      prevMonthDays: [],
+      currentMonthDays: [],
+      nextMonthDays: [],
+      months: moment.months(),
+      currentDayOfWeek: newDate.format('D'),
+      currentMonth: newDate.format('MMMM'),
+      currentYear: newDate.format('Y'),
+      selectedDate: null,
+      selectedTime: newDate.format('h:mm a'),
       selectedPartySize: 2,
     };
 
@@ -38,7 +42,7 @@ class App extends React.Component {
     this.setSelectedPartySize = this.setSelectedPartySize.bind(this);
   }
 
-  componentDidMount(time = this.props.newDate.toLocaleTimeString('en-US')) {
+  componentDidMount(time = this.props.newDate.format('h:mm a')) {
     this.setTimeOptions(time);
   }
 
@@ -99,7 +103,7 @@ App.propTypes = {
 };
 
 App.defaultProps = {
-  newDate: new Date(),
+  newDate: moment(),
   allMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
   allDaysOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
 };
