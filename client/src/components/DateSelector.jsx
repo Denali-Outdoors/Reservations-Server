@@ -5,7 +5,7 @@ import Calendar from './Calendar';
 // Tue, Mar 17
 
 const SelectWrapper = styled.div`
-  width: 235px;
+  width: 233px;
   height: 18px;
   display: block;
   padding: 5px 24px 5px 32px;
@@ -13,7 +13,7 @@ const SelectWrapper = styled.div`
   padding-top: 7px;
   padding-bottom: 3px;
   border-radius: 3px;
-  border: 1px solid #999999;
+  border: 1px solid #cccccc;
   border-radius: 3px;
   background-color: white;
   font-size: 13.33px;
