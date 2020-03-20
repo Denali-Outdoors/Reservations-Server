@@ -20,8 +20,8 @@ const AppWrapper = styled.div`
 `;
 
 class App extends React.Component {
-  constructor({ newDate, allMonths, allDaysOfWeek }) {
-    super({ newDate, allMonths, allDaysOfWeek });
+  constructor({ newDate }) {
+    super({ newDate });
     this.state = {
       timeOptions: [],
       days: [],
@@ -130,7 +130,7 @@ class App extends React.Component {
     return (
       <AppWrapper>
         <Title />
-        <DateSelector matrixOfDays={this.state.days} />
+        <DateSelector selectedDate={this.state.selectedDate} matrixOfDays={this.state.days} />
         <TimeSelector timeOptions={this.state.timeOptions} setSelectedTime={this.setSelectedTime} />
         <PartySelector setSelectedPartySize={this.setSelectedPartySize} />
         <ReserveButton />
@@ -142,14 +142,10 @@ class App extends React.Component {
 App.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   newDate: PropTypes.object, /* Should be a Date object */
-  allMonths: PropTypes.arrayOf(PropTypes.string),
-  allDaysOfWeek: PropTypes.arrayOf(PropTypes.string),
 };
 
 App.defaultProps = {
   newDate: moment(),
-  allMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-  allDaysOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
 };
 
 export default App;
