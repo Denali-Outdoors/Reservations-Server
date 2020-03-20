@@ -14,6 +14,7 @@ const ButtonWrapper = styled.button`
   border-radius: 3px;
   cursor: pointer;
   color: white;
+  font-weight: 700;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   transition: 0.6s;
   :hover {
