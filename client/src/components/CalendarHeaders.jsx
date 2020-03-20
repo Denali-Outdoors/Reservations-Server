@@ -16,17 +16,15 @@ const DayHeader = styled.div`
 `;
 
 const CalendarHeaders = () => (
-  <thead>
-    <RowWrapper>
-      <DayHeader>Su</DayHeader>
-      <DayHeader>Mo</DayHeader>
-      <DayHeader>Tu</DayHeader>
-      <DayHeader>We</DayHeader>
-      <DayHeader>Th</DayHeader>
-      <DayHeader>Fr</DayHeader>
-      <DayHeader>Sa</DayHeader>
-    </RowWrapper>
-  </thead>
+  <RowWrapper>
+    <DayHeader>Su</DayHeader>
+    <DayHeader>Mo</DayHeader>
+    <DayHeader>Tu</DayHeader>
+    <DayHeader>We</DayHeader>
+    <DayHeader>Th</DayHeader>
+    <DayHeader>Fr</DayHeader>
+    <DayHeader>Sa</DayHeader>
+  </RowWrapper>
 );
 
 export default CalendarHeaders;
