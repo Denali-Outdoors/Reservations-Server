@@ -20,22 +20,13 @@ const SelectWrapper = styled.div`
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 `;
 
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const newDate = new Date();
-const today = {
-  month: newDate.getMonth(),
-  day: newDate.getDay(),
-};
-
-const DateSelector = ({matrixOfDays}) => {
-  const [date, setDate] = useState(today);
+const DateSelector = ({ selectedDate, setSelectedDate, matrixOfDays}) => {
   const [calendar, setCalendar] = useState(false);
 
   return (
     <SelectWrapper onClick={() => { setCalendar(!calendar); }}>
-      { `${days[date.day]}, ${months[date.month]} ${date.day.toString()}` }
-      { calendar ? <Calendar setDate={setDate} matrixOfDays={matrixOfDays} /> : null }
+      { `${selectedDate.format('ddd')}, ${selectedDate.format('MMM')} ${selectedDate.format('D')}` }
+      { calendar ? <Calendar selectedDate={selectedDate} setDate={setSelectedDate} matrixOfDays={matrixOfDays} /> : null }
     </SelectWrapper>
   );
 };
