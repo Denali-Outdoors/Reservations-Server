@@ -56,7 +56,7 @@ const Calendar = ({ selectedDate, setSelectedDate, matrixOfDays }) => (
     <MonthWrapper>{`${selectedDate.format('MMMM')} ${selectedDate.format('YYYY')}`}</MonthWrapper>
     <TableWrapper>
       <CalendarHeaders />
-      {matrixOfDays.map((week) => (<RowWrapper>{week.map((day) => <Day day={day} setSelectedDate={setSelectedDate} />)}</RowWrapper>))}
+      {matrixOfDays.map((week, weekIndex) => (<RowWrapper key={weekIndex}>{week.map((day, dayIndex) => <Day key={`${weekIndex}${dayIndex}`} day={day} setSelectedDate={setSelectedDate} />)}</RowWrapper>))}
     </TableWrapper>
   </CalendarWrapper>
 );
