@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import moment from 'moment';
 
 const DayWrapper = styled.div`
   display: table-cell;
@@ -13,7 +14,9 @@ const DayWrapper = styled.div`
 `;
 
 const Day = ({ day, setSelectedDate }) => (
-  <DayWrapper>{day.date}</DayWrapper>
+  <DayWrapper onClick={(e) => { e.preventDefault(); setSelectedDate(moment(`${day.year}-${day.month}-${day.date}`)); }}>
+    {day.date}
+  </DayWrapper>
 );
 
 Day.propTypes = {
@@ -23,7 +26,7 @@ Day.propTypes = {
 
 Day.defaultProps = {
   day: {},
-  setSelectedDate: () => {},
+  setSelectedDate: () => { },
 };
 
 export default Day;
