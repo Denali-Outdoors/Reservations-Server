@@ -53,7 +53,7 @@ const RowWrapper = styled.div`
 
 const Calendar = ({ selectedDate, setSelectedDate, matrixOfDays }) => (
   <CalendarWrapper>
-    <MonthWrapper>{selectedDate.format('MMMM')}</MonthWrapper>
+    <MonthWrapper>{`${selectedDate.format('MMMM')} ${selectedDate.format('YYYY')}`}</MonthWrapper>
     <TableWrapper>
       <CalendarHeaders />
       {matrixOfDays.map((week) => (<RowWrapper>{week.map((day) => <Day day={day} setSelectedDate={setSelectedDate} />)}</RowWrapper>))}
