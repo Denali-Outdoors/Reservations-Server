@@ -51,23 +51,25 @@ const RowWrapper = styled.div`
   border-bottom: 1px solid #cccccc;
 `;
 
-const Calendar = ({ selectedDate, setSelectedDate, matrixOfDays }) => {
-  return (
-    <CalendarWrapper>
-      <MonthWrapper>{selectedDate.format('MMMM')}</MonthWrapper>
-      <TableWrapper>
-        <CalendarHeaders />
-        {matrixOfDays.map((week) => (<RowWrapper>{week.map((day) => <Day day={day} setSelectedDate={setSelectedDate} />)}</RowWrapper>))}
-      </TableWrapper>
-    </CalendarWrapper>
-  );
-};
+const Calendar = ({ selectedDate, setSelectedDate, matrixOfDays }) => (
+  <CalendarWrapper>
+    <MonthWrapper>{selectedDate.format('MMMM')}</MonthWrapper>
+    <TableWrapper>
+      <CalendarHeaders />
+      {matrixOfDays.map((week) => (<RowWrapper>{week.map((day) => <Day day={day} setSelectedDate={setSelectedDate} />)}</RowWrapper>))}
+    </TableWrapper>
+  </CalendarWrapper>
+);
 
 Calendar.propTypes = {
+  selectedDate: PropTypes.object,
+  setSelectedDate: PropTypes.func,
   matrixOfDays: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
 };
 
 Calendar.defaultProps = {
+  selectedDate: {},
+  setSelectedDate: () => {},
   matrixOfDays: [[{}]],
 };
 
