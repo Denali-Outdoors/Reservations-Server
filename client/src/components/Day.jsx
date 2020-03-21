@@ -15,7 +15,7 @@ const DayWrapper = styled.div`
 
 const Day = ({ day, setSelectedDate }) => (
   <DayWrapper onClick={(e) => { e.preventDefault(); setSelectedDate(moment(`${day.year}-${day.month}-${day.date}`)); }}>
-    {day.date}
+    {parseInt(day.date)}
   </DayWrapper>
 );
 
