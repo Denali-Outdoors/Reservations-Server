@@ -26,7 +26,7 @@ const DateSelector = ({ selectedDate, setSelectedDate, matrixOfDays}) => {
   return (
     <SelectWrapper onClick={() => { setCalendar(!calendar); }}>
       { `${selectedDate.format('ddd')}, ${selectedDate.format('MMM')} ${selectedDate.format('D')}` }
-      { calendar ? <Calendar selectedDate={selectedDate} setDate={setSelectedDate} matrixOfDays={matrixOfDays} /> : null }
+      { calendar ? <Calendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} matrixOfDays={matrixOfDays} /> : null }
     </SelectWrapper>
   );
 };
