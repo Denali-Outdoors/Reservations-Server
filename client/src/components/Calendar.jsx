@@ -51,15 +51,19 @@ const RowWrapper = styled.div`
   border-bottom: 1px solid #cccccc;
 `;
 
-const Calendar = ({ selectedDate, setSelectedDate, matrixOfDays }) => (
-  <CalendarWrapper>
-    <MonthWrapper>{`${selectedDate.format('MMMM')} ${selectedDate.format('YYYY')}`}</MonthWrapper>
-    <TableWrapper>
-      <CalendarHeaders />
-      {matrixOfDays.map((week, weekIndex) => (<RowWrapper key={weekIndex}>{week.map((day, dayIndex) => <Day key={`${weekIndex}${dayIndex}`} day={day} setSelectedDate={setSelectedDate} />)}</RowWrapper>))}
-    </TableWrapper>
-  </CalendarWrapper>
-);
+const Calendar = ({ selectedDate, setSelectedDate, thisMonth, nextMonth, currentDate }) => {
+  const thisMonthDays = thisMonth.map((week, weekIndex) => (<RowWrapper key={weekIndex}>{week.map((day, dayIndex) => <Day key={`${weekIndex}${dayIndex}`} day={day} setSelectedDate={day.disabled ? () => {} : setSelectedDate} />)}</RowWrapper>));
+  const nextMonthDays = nextMonth.map((week, weekIndex) => (<RowWrapper key={weekIndex}>{week.map((day, dayIndex) => <Day key={`${weekIndex}${dayIndex}`} day={day} setSelectedDate={day.disabled ? () => {} : setSelectedDate} />)}</RowWrapper>));
+  return (
+    <CalendarWrapper>
+      <MonthWrapper>{`${selectedDate.format('MMMM')} ${selectedDate.format('YYYY')}`}</MonthWrapper>
+      <TableWrapper>
+        <CalendarHeaders />
+        {selectedDate.format('MMMM') === currentDate.format('MMMM') ? thisMonthDays : nextMonthDays}
+      </TableWrapper>
+    </CalendarWrapper>
+  );
+};
 
 Calendar.propTypes = {
   selectedDate: PropTypes.object,
