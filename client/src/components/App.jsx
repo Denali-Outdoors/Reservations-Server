@@ -136,7 +136,10 @@ class App extends React.Component {
     const selectedDay = selectedDate.date();
     const todaysDate = currentDate.date();
     const zeroPad = (num) => `0${num.toString()}`;
-
+    /*
+    The Day object track if a given day is selectable (disabled), is prior to the current day or over a month away (otherMonth)
+    a moment object associated with the day (date), an array of unavailable times/moment objects (unavailable), and 
+    */
     const Day = (disabled, otherMonth, date, unavailable, selected, year, month) => ({
       disabled, otherMonth, date, unavailable, selected, year, month,
     });
