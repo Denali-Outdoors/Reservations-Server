@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import CalendarHeaders from './CalendarHeaders';
@@ -51,26 +51,46 @@ const RowWrapper = styled.div`
   border-bottom: 1px solid #cccccc;
 `;
 
-const Calendar = ({ selectedDate, setSelectedDate, matrixOfDays }) => (
-  <CalendarWrapper>
-    <MonthWrapper>{`${selectedDate.format('MMMM')} ${selectedDate.format('YYYY')}`}</MonthWrapper>
-    <TableWrapper>
-      <CalendarHeaders />
-      {matrixOfDays.map((week, weekIndex) => (<RowWrapper key={weekIndex}>{week.map((day, dayIndex) => <Day key={`${weekIndex}${dayIndex}`} day={day} setSelectedDate={setSelectedDate} />)}</RowWrapper>))}
-    </TableWrapper>
-  </CalendarWrapper>
-);
+const NavButton = styled.button`
+  border: none;
+  background: white;
+  :focus {
+    outline: 0;
+  }
+`;
+
+const Calendar = ({ selectedDate, setSelectedDate, thisMonth, nextMonth, currentDate, nextMoment }) => {
+  const [month, setMonth] = useState(selectedDate.format('MMMM') === currentDate.format('MMMM'));
+  const thisMonthDays = thisMonth.map((week, weekIndex) => (<RowWrapper key={weekIndex}>{week.map((day, dayIndex) => <Day key={`${weekIndex}${dayIndex}`} day={day} setSelectedDate={day.disabled ? () => {} : setSelectedDate} />)}</RowWrapper>));
+  const nextMonthDays = nextMonth.map((week, weekIndex) => (<RowWrapper key={weekIndex}>{week.map((day, dayIndex) => <Day key={`${weekIndex}${dayIndex}`} day={day} setSelectedDate={day.disabled ? () => {} : setSelectedDate} />)}</RowWrapper>));
+  return (
+    <CalendarWrapper>
+      <NavButton onClick={(e) => { e.stopPropagation(); setMonth(!month); }}>{ month ? '>' : '<' }</NavButton>
+      <MonthWrapper>{ month ? `${currentDate.format('MMMM')} ${currentDate.format('YYYY')}` : `${nextMoment.format('MMMM')} ${nextMoment.format('YYYY')}`}</MonthWrapper>
+      <TableWrapper>
+        <CalendarHeaders />
+        { month ? thisMonthDays : nextMonthDays}
+      </TableWrapper>
+    </CalendarWrapper>
+  );
+};
 
 Calendar.propTypes = {
   selectedDate: PropTypes.object,
   setSelectedDate: PropTypes.func,
-  matrixOfDays: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
+  thisMonth: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
+  nextMonth: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
+  currentDate: PropTypes.object,
+  nextMoment: PropTypes.object,
 };
 
 Calendar.defaultProps = {
   selectedDate: {},
   setSelectedDate: () => {},
-  matrixOfDays: [[{}]],
+  thisMonth: [[{}]],
+  nextMonth: [[{}]],
+  currentDate: {},
+  nextMoment: {},
 };
 
 export default Calendar;

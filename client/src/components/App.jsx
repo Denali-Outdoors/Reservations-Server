@@ -25,8 +25,11 @@ class App extends React.Component {
     this.state = {
       timeOptions: [],
       days: [],
+      nextDays: [],
       months: moment.months(),
+      today: newDate,
       selectedDate: newDate,
+      nextMonth: moment().add(1, 'months'),
       selectedPartySize: 2,
     };
 
@@ -40,7 +43,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.setTimeOptions(this.state.selectedDate.format('h:mm a'));
-    this.setDays(this.state.selectedDate);
+    this.setDays(this.state.selectedDate, this.state.today);
   }
 
   setTimeOptions(time = this.state.selectedDate.format('h:mm a')) {
@@ -57,7 +60,7 @@ class App extends React.Component {
   }
 
   setSelectedDate(dateObj) {
-    this.setState((state) => ({ ...state, selectedDate: dateObj }), () => { this.setDays(this.state.selectedDate); });
+    this.setState((state) => ({ ...state, selectedDate: dateObj }), () => { this.setDays(this.state.selectedDate, this.state.today); });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -83,43 +86,71 @@ class App extends React.Component {
     return timeOptions;
   }
 
-  setDays(date) {
+  setDays(selectedDate, currentDate) {
     const prevDays = []; // will capture all overflow days from prev month
     const currDays = []; // will capture all days from current month
     const nextDays = []; // will capture all overflow days from next month
     const weeks = []; // will hold all days grouped into weeks
-    const firstDayIndex = moment(date).startOf('month').format('d');
-    const lastDayIndex = moment(date).endOf('month').format('d');
-    const prevMonth = moment(`${date.format('YYYY')}-${date.format('MM')}-${date.format('DD')}`).subtract(1, 'months');
-    const nextMonth = moment(`${date.format('YYYY')}-${date.format('MM')}-${date.format('DD')}`).add(1, 'months');
+    const nextPrevDays = []; // will capture relative to next month
+    const nextMonthDays = []; // will capture relative to next month
+    const nextNextDays = []; // will capture relative to next month
+    const nextWeeks = []; // will capture relative to next month
+    const prevMonth = moment().subtract(1, 'months');
+    const nextMonth = moment().add(1, 'months');
+    const nextNextMonth = moment().add(2, 'months');
+    const firstDayIndex = moment(currentDate).startOf('month').format('d');
+    const lastDayIndex = moment(currentDate).endOf('month').format('d');
+    const firstDayNextMonthIndex = moment(nextMonth).startOf('month').format('d');
+    const lastDayNextMonthIndex = moment(nextMonth).endOf('month').format('d');
     const daysInLastMonth = prevMonth.daysInMonth();
-    const daysInMonth = date.daysInMonth();
-    const currentDay = date.day();
+    const daysInMonth = currentDate.daysInMonth();
+    const daysInNextMonth = nextMonth.daysInMonth();
+    const selectedDay = selectedDate.date();
+    const todaysDate = currentDate.date();
     const zeroPad = (num) => `0${num.toString()}`;
 
-    const Day = (prev, curr, next, date, available, selected, year, month) => ({
-      prev, curr, next, date, available, selected, year, month
+    const Day = (disabled, otherMonth, date, available, selected, year, month) => ({
+      disabled, otherMonth, date, available, selected, year, month,
     });
     // Add previous Days
     for (let i = daysInLastMonth - firstDayIndex; i < daysInLastMonth; i += 1) {
-      prevDays.push(Day(true, false, false, i, null, false, prevMonth.format('YYYY'), prevMonth.subtract(1, 'months').format('MM')));
+      prevDays.push(Day(true, false, i + 1, null, false, prevMonth.format('YYYY'), prevMonth.format('MM')));
+    }
+    // Add previous Days for next month
+    for (let i = daysInMonth - firstDayNextMonthIndex; i < daysInMonth; i += 1) {
+      nextPrevDays.push(Day(false, true, i + 1, null, false, currentDate.format('YYYY'), currentDate.format('MM')));
     }
     // Add current Days
     for (let i = 1; i < daysInMonth + 1; i += 1) {
-      if (i < currentDay) {
-        prevDays.push(Day(false, true, false, i < 10 ? zeroPad(i) : i, null, false, date.format('YYYY'), date.format('MM')));
-      } else if (i === currentDay) {
-        prevDays.push(Day(false, true, false, i < 10 ? zeroPad(i) : i, null, true, date.format('YYYY'), date.format('MM')));
+      if (i < todaysDate) {
+        prevDays.push(Day(true, false, i < 10 ? zeroPad(i) : i, null, false, currentDate.format('YYYY'), currentDate.format('MM')));
+      } else if (i === selectedDay) {
+        currDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, null, true, currentDate.format('YYYY'), currentDate.format('MM')));
       } else {
-        prevDays.push(Day(false, true, false, i < 10 ? zeroPad(i) : i, null, false, date.format('YYYY'), date.format('MM')));
+        currDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, null, false, currentDate.format('YYYY'), currentDate.format('MM')));
+      }
+    }
+    // Add current Days for next month
+    for (let i = 1; i < daysInNextMonth + 1; i += 1) {
+      if (i === selectedDay) {
+        nextMonthDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, null, true, nextMonth.format('YYYY'), nextMonth.format('MM')));
+      } else if (i > nextMonth.date()) {
+        nextMonthDays.push(Day(true, false, i < 10 ? zeroPad(i) : i, null, false, nextMonth.format('YYYY'), nextMonth.format('MM')));
+      } else {
+        nextMonthDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, null, false, nextMonth.format('YYYY'), nextMonth.format('MM')));
       }
     }
     // Add next Days
     for (let i = 1; i < 7 - lastDayIndex; i += 1) {
-      nextDays.push(Day(false, false, true, i < 10 ? zeroPad(i) : i, null, false, nextMonth.format('YYYY'), nextMonth.format('MM')));
+      nextDays.push(Day(false, true, i < 10 ? zeroPad(i) : i, null, false, nextMonth.format('YYYY'), nextMonth.format('MM')));
+    }
+    // Add next Days for next month
+    for (let i = 1; i < 7 - lastDayNextMonthIndex; i += 1) {
+      nextNextDays.push(Day(true, false, i < 10 ? zeroPad(i) : i, null, false, nextNextMonth.format('YYYY'), nextNextMonth.format('MM')));
     }
     // Put all days together to group into weeks
     const allDays = [...prevDays, ...currDays, ...nextDays];
+    const allNextMonthDays = [...nextPrevDays, ...nextMonthDays, ...nextNextDays];
     // Add weeks
     let tempWeek = [];
     allDays.forEach((day) => {
@@ -129,15 +160,22 @@ class App extends React.Component {
         tempWeek = [];
       }
     });
+    allNextMonthDays.forEach((day) => {
+      tempWeek.push(day);
+      if (tempWeek.length === 7) {
+        nextWeeks.push(tempWeek);
+        tempWeek = [];
+      }
+    });
     // setState
-    this.setState((state) => ({ ...state, days: [...weeks] }));
+    this.setState((state) => ({ ...state, days: [...weeks], nextDays: [...nextWeeks] }));
   }
 
   render() {
     return (
       <AppWrapper>
         <Title />
-        <DateSelector selectedDate={this.state.selectedDate} setSelectedDate={this.setSelectedDate} matrixOfDays={this.state.days} />
+        <DateSelector selectedDate={this.state.selectedDate} setSelectedDate={this.setSelectedDate} thisMonth={this.state.days} nextMonth={this.state.nextDays} today={this.state.today} nextMoment={this.state.nextMonth}/>
         <TimeSelector timeOptions={this.state.timeOptions} setSelectedTime={this.setSelectedTime} />
         <PartySelector setSelectedPartySize={this.setSelectedPartySize} />
         <ReserveButton />
@@ -156,39 +194,3 @@ App.defaultProps = {
 };
 
 export default App;
-
-/*
-  setDays() {
-    const prevDays = []; // will capture all overflow days from prev month
-    const currDays = []; // will capture all days from current month
-    const nextDays = []; // will capture all overflow days from next month
-    const weeks = []; // will hold all days grouped into weeks
-    const prevMonth = moment(this.props.newDate).format('M') - 1;
-    const nextMonth = moment(this.props.newDate).format('M') + 1;
-    const firstDayIndex = moment(this.props.newDate).startOf('month').format('d');
-    const lastDayIndex = moment(this.props.newDate).endOf('month').format('d');
-    const daysInMonth = this.props.newDate.daysInMonth();
-    const currentDay = this.state.selectedDate.day();
-
-    const Day = (prev, curr, next, date, available, selected) => ({
-      prev, curr, next, date, available, selected,
-    });
-    // Add previous Days
-    for (let i = 0; i < firstDayIndex; i += 1) {
-      prevDays.push(Day(true, false, false, 'xx', null, false));
-    }
-    // Add current Days
-    for (let i = 1; i < daysInMonth + 1; i += 1) {
-      if (i < currentDay) {
-        prevDays.push(Day(false, true, false, i, null, false));
-      } else if (i === currentDay) {
-        prevDays.push(Day(false, true, false, i, null, true));
-      } else {
-        prevDays.push(Day(false, true, false, i, null, false));
-      }
-    }
-    // Add next Days
-    for (let i = 6 - lastDayIndex; i > 0; i -= 1) {
-      nextDays.push(Day(false, false, true, 'yy', null, false));
-    }
-*/
