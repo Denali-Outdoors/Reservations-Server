@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import $ from 'jquery';
 
 import Title from './Title';
 import DateSelector from './DateSelector';
@@ -20,9 +21,10 @@ const AppWrapper = styled.div`
 `;
 
 class App extends React.Component {
-  constructor({ newDate }) {
+  constructor({ restaurantID, newDate }) {
     super({ newDate });
     this.state = {
+      restaurantID,
       timeOptions: [],
       days: [],
       nextDays: [],
@@ -39,11 +41,15 @@ class App extends React.Component {
     this.setSelectedPartySize = this.setSelectedPartySize.bind(this);
     this.setDays = this.setDays.bind(this);
     this.setSelectedDate = this.setSelectedDate.bind(this);
+    this.getAvailability = this.getAvailability.bind(this);
+    this.setAvailability = this.setAvailability.bind(this);
+    this.postReservation = this.postReservation.bind(this);
   }
 
   componentDidMount() {
     this.setTimeOptions(this.state.selectedDate.format('h:mm a'));
     this.setDays(this.state.selectedDate, this.state.today);
+    this.getAvailability();
   }
 
   setTimeOptions(time = this.state.selectedDate.format('h:mm a')) {
@@ -56,11 +62,21 @@ class App extends React.Component {
   }
 
   setSelectedPartySize(num) {
-    this.setState((state) => ({ ...state, selectedPartySize: num }));
+    this.setState((state) => ({ ...state, selectedPartySize: num }), this.getAvailability);
   }
 
   setSelectedDate(dateObj) {
     this.setState((state) => ({ ...state, selectedDate: dateObj }), () => { this.setDays(this.state.selectedDate, this.state.today); });
+  }
+
+  getAvailability() {
+    $.get(`/reservations/${this.state.restaurantID}/${this.state.selectedPartySize}`, (results) => {
+      this.setAvailability(results);
+    });
+  }
+
+  setAvailability(results) {
+    this.setState((state) => ({ ...state, availability: results }));
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -171,6 +187,13 @@ class App extends React.Component {
     this.setState((state) => ({ ...state, days: [...weeks], nextDays: [...nextWeeks] }));
   }
 
+  postReservation() {
+    const data = { restaurantID: this.state.restaurantID, date: this.state.selectedDay };
+    $.post('/reservations', data, () => {
+      console.log('Posted reservation to database');
+    });
+  }
+
   render() {
     return (
       <AppWrapper>
@@ -178,7 +201,7 @@ class App extends React.Component {
         <DateSelector selectedDate={this.state.selectedDate} setSelectedDate={this.setSelectedDate} thisMonth={this.state.days} nextMonth={this.state.nextDays} today={this.state.today} nextMoment={this.state.nextMonth}/>
         <TimeSelector timeOptions={this.state.timeOptions} setSelectedTime={this.setSelectedTime} />
         <PartySelector setSelectedPartySize={this.setSelectedPartySize} />
-        <ReserveButton />
+        <ReserveButton postReservation={this.postReservation} />
       </AppWrapper>
     );
   }
@@ -187,10 +210,12 @@ class App extends React.Component {
 App.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   newDate: PropTypes.object, /* Should be a Date object */
+  restaurantID: PropTypes.number,
 };
 
 App.defaultProps = {
   newDate: moment(),
+  restaurantID: 1,
 };
 
 export default App;
