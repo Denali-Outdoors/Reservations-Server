@@ -15,11 +15,12 @@ const DayWrapper = styled.div`
   font-size: 13px;
   vertical-align: middle;
   text-align: center;
+  background-color: ${(props) => (props.day.selected ? '#d32323' : 'white')};
   color: ${(props) => {
-    if (props.day.next) {
+    if (props.day.otherMonth) {
       return '#8b9898';
     }
-    if (props.day.prev) {
+    if (props.day.disabled) {
       return '#dce0e0';
     }
     if (props.day.selected) {
@@ -27,12 +28,15 @@ const DayWrapper = styled.div`
     }
     return '#333333';
   }};
-  background-color: ${(props) => (props.day.selected ? '#d32323' : 'white')};
-  cursor: ${(props) => (props.day.prev ? 'default' : 'pointer')};
-  :hover {
-    box-shadow: inset 0 0 2px #cddae2;
-    background-color: #e2eaf1;
-  }
+  cursor: ${(props) => (props.day.disabled ? 'default' : 'pointer')};
+  ${(props) => {
+    if (props.day.selected) {
+      return ':hover {box-shadow: inset 0 0 2px #cddae2;}';
+    }
+    if (!props.day.disabled) {
+      return ':hover {box-shadow: inset 0 0 2px #cddae2; background-color: #dfdfe8; }'
+    }
+  }};
 `;
 // lastchild no border
 // next month #8b9898
