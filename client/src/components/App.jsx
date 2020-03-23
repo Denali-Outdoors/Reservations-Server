@@ -29,6 +29,7 @@ class App extends React.Component {
       months: moment.months(),
       today: newDate,
       selectedDate: newDate,
+      nextMonth: moment().add(1, 'months'),
       selectedPartySize: 2,
     };
 
@@ -94,9 +95,9 @@ class App extends React.Component {
     const nextMonthDays = []; // will capture relative to next month
     const nextNextDays = []; // will capture relative to next month
     const nextWeeks = []; // will capture relative to next month
-    const prevMonth = moment(`${currentDate.format('YYYY')}-${currentDate.format('MM')}-${currentDate.format('DD')}`).subtract(1, 'months');
-    const nextMonth = moment(`${currentDate.format('YYYY')}-${currentDate.format('MM')}-${currentDate.format('DD')}`).add(1, 'months');
-    const nextNextMonth = moment(`${currentDate.format('YYYY')}-${currentDate.format('MM')}-${currentDate.format('DD')}`).add(2, 'months');
+    const prevMonth = moment().subtract(1, 'months');
+    const nextMonth = moment().add(1, 'months');
+    const nextNextMonth = moment().add(2, 'months');
     const firstDayIndex = moment(currentDate).startOf('month').format('d');
     const lastDayIndex = moment(currentDate).endOf('month').format('d');
     const firstDayNextMonthIndex = moment(nextMonth).startOf('month').format('d');
@@ -108,8 +109,8 @@ class App extends React.Component {
     const todaysDate = currentDate.date();
     const zeroPad = (num) => `0${num.toString()}`;
 
-    const Day = (disabled, next, date, available, selected, year, month) => ({
-      disabled, next, date, available, selected, year, month,
+    const Day = (disabled, otherMonth, date, available, selected, year, month) => ({
+      disabled, otherMonth, date, available, selected, year, month,
     });
     // Add previous Days
     for (let i = daysInLastMonth - firstDayIndex; i < daysInLastMonth; i += 1) {
@@ -117,7 +118,7 @@ class App extends React.Component {
     }
     // Add previous Days for next month
     for (let i = daysInMonth - firstDayNextMonthIndex; i < daysInMonth; i += 1) {
-      nextPrevDays.push(Day(false, false, i + 1, null, false, currentDate.format('YYYY'), currentDate.format('MM')));
+      nextPrevDays.push(Day(false, true, i + 1, null, false, currentDate.format('YYYY'), currentDate.format('MM')));
     }
     // Add current Days
     for (let i = 1; i < daysInMonth + 1; i += 1) {
@@ -174,7 +175,7 @@ class App extends React.Component {
     return (
       <AppWrapper>
         <Title />
-        <DateSelector selectedDate={this.state.selectedDate} setSelectedDate={this.setSelectedDate} thisMonth={this.state.days} nextMonth={this.state.nextDays} today={this.state.today} />
+        <DateSelector selectedDate={this.state.selectedDate} setSelectedDate={this.setSelectedDate} thisMonth={this.state.days} nextMonth={this.state.nextDays} today={this.state.today} nextMoment={this.state.nextMonth}/>
         <TimeSelector timeOptions={this.state.timeOptions} setSelectedTime={this.setSelectedTime} />
         <PartySelector setSelectedPartySize={this.setSelectedPartySize} />
         <ReserveButton />
@@ -193,39 +194,3 @@ App.defaultProps = {
 };
 
 export default App;
-
-/*
-  setDays() {
-    const prevDays = []; // will capture all overflow days from prev month
-    const currDays = []; // will capture all days from current month
-    const nextDays = []; // will capture all overflow days from next month
-    const weeks = []; // will hold all days grouped into weeks
-    const prevMonth = moment(this.props.newDate).format('M') - 1;
-    const nextMonth = moment(this.props.newDate).format('M') + 1;
-    const firstDayIndex = moment(this.props.newDate).startOf('month').format('d');
-    const lastDayIndex = moment(this.props.newDate).endOf('month').format('d');
-    const daysInMonth = this.props.newDate.daysInMonth();
-    const currentDay = this.state.selectedDate.day();
-
-    const Day = (prev, curr, next, date, available, selected) => ({
-      prev, curr, next, date, available, selected,
-    });
-    // Add previous Days
-    for (let i = 0; i < firstDayIndex; i += 1) {
-      prevDays.push(Day(true, false, false, 'xx', null, false));
-    }
-    // Add current Days
-    for (let i = 1; i < daysInMonth + 1; i += 1) {
-      if (i < currentDay) {
-        prevDays.push(Day(false, true, false, i, null, false));
-      } else if (i === currentDay) {
-        prevDays.push(Day(false, true, false, i, null, true));
-      } else {
-        prevDays.push(Day(false, true, false, i, null, false));
-      }
-    }
-    // Add next Days
-    for (let i = 6 - lastDayIndex; i > 0; i -= 1) {
-      nextDays.push(Day(false, false, true, 'yy', null, false));
-    }
-*/
