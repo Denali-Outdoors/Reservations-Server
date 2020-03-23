@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import $ from 'jquery';
 
 import Title from './Title';
 import DateSelector from './DateSelector';
@@ -20,12 +21,14 @@ const AppWrapper = styled.div`
 `;
 
 class App extends React.Component {
-  constructor({ newDate }) {
+  constructor({ restaurantID, newDate }) {
     super({ newDate });
     this.state = {
+      restaurantID,
       timeOptions: [],
       days: [],
       nextDays: [],
+      unavailable: [],
       months: moment.months(),
       today: newDate,
       selectedDate: newDate,
@@ -39,11 +42,15 @@ class App extends React.Component {
     this.setSelectedPartySize = this.setSelectedPartySize.bind(this);
     this.setDays = this.setDays.bind(this);
     this.setSelectedDate = this.setSelectedDate.bind(this);
+    this.getAvailability = this.getAvailability.bind(this);
+    this.setAvailability = this.setAvailability.bind(this);
+    this.postReservation = this.postReservation.bind(this);
+    this.checkAvailability = this.checkAvailability.bind(this);
   }
 
   componentDidMount() {
     this.setTimeOptions(this.state.selectedDate.format('h:mm a'));
-    this.setDays(this.state.selectedDate, this.state.today);
+    this.getAvailability();
   }
 
   setTimeOptions(time = this.state.selectedDate.format('h:mm a')) {
@@ -56,11 +63,24 @@ class App extends React.Component {
   }
 
   setSelectedPartySize(num) {
-    this.setState((state) => ({ ...state, selectedPartySize: num }));
+    this.setState((state) => ({ ...state, selectedPartySize: num }), this.getAvailability);
   }
 
   setSelectedDate(dateObj) {
     this.setState((state) => ({ ...state, selectedDate: dateObj }), () => { this.setDays(this.state.selectedDate, this.state.today); });
+  }
+
+  getAvailability() {
+    $.get(`/reservations/${this.state.restaurantID}/${this.state.selectedPartySize}`, (results) => {
+      this.setAvailability(results);
+    });
+  }
+
+  setAvailability(results) {
+    const unavailable = results.map((time) => moment(time.date_time));
+    this.setState((state) => ({ ...state, unavailable }), () => {
+      this.setDays(this.state.selectedDate, this.state.today);
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -86,7 +106,15 @@ class App extends React.Component {
     return timeOptions;
   }
 
-  setDays(selectedDate, currentDate) {
+  // eslint-disable-next-line react/sort-comp
+  checkAvailability(queryMoment) {
+    return this.state.unavailable.filter((unavailableDay) => {
+      return unavailableDay.format('l') === queryMoment.format('l');
+    });
+  }
+
+
+  setDays(selectedDate = this.selectedDate, currentDate = this.state.today) {
     const prevDays = []; // will capture all overflow days from prev month
     const currDays = []; // will capture all days from current month
     const nextDays = []; // will capture all overflow days from next month
@@ -108,9 +136,12 @@ class App extends React.Component {
     const selectedDay = selectedDate.date();
     const todaysDate = currentDate.date();
     const zeroPad = (num) => `0${num.toString()}`;
-
-    const Day = (disabled, otherMonth, date, available, selected, year, month) => ({
-      disabled, otherMonth, date, available, selected, year, month,
+    /*
+    The Day object track if a given day is selectable (disabled), is prior to the current day or over a month away (otherMonth)
+    a moment object associated with the day (date), an array of unavailable times/moment objects (unavailable), and 
+    */
+    const Day = (disabled, otherMonth, date, unavailable, selected, year, month) => ({
+      disabled, otherMonth, date, unavailable, selected, year, month,
     });
     // Add previous Days
     for (let i = daysInLastMonth - firstDayIndex; i < daysInLastMonth; i += 1) {
@@ -127,7 +158,7 @@ class App extends React.Component {
       } else if (i === selectedDay) {
         currDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, null, true, currentDate.format('YYYY'), currentDate.format('MM')));
       } else {
-        currDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, null, false, currentDate.format('YYYY'), currentDate.format('MM')));
+        currDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, this.checkAvailability(moment(`${currentDate.format('YYYY')}-${currentDate.format('MMMM')}-${i}`)), false, currentDate.format('YYYY'), currentDate.format('MM')));
       }
     }
     // Add current Days for next month
@@ -137,12 +168,12 @@ class App extends React.Component {
       } else if (i > nextMonth.date()) {
         nextMonthDays.push(Day(true, false, i < 10 ? zeroPad(i) : i, null, false, nextMonth.format('YYYY'), nextMonth.format('MM')));
       } else {
-        nextMonthDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, null, false, nextMonth.format('YYYY'), nextMonth.format('MM')));
+        nextMonthDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, this.checkAvailability(moment(`${nextMonth.format('YYYY')}-${nextMonth.format('MMMM')}-${i}`)), false, nextMonth.format('YYYY'), nextMonth.format('MM')));
       }
     }
     // Add next Days
     for (let i = 1; i < 7 - lastDayIndex; i += 1) {
-      nextDays.push(Day(false, true, i < 10 ? zeroPad(i) : i, null, false, nextMonth.format('YYYY'), nextMonth.format('MM')));
+      nextDays.push(Day(false, true, i < 10 ? zeroPad(i) : i, this.checkAvailability(moment(`${nextMonth.format('YYYY')}-${nextMonth.format('MMMM')}-${i}`)), false, nextMonth.format('YYYY'), nextMonth.format('MM')));
     }
     // Add next Days for next month
     for (let i = 1; i < 7 - lastDayNextMonthIndex; i += 1) {
@@ -171,6 +202,13 @@ class App extends React.Component {
     this.setState((state) => ({ ...state, days: [...weeks], nextDays: [...nextWeeks] }));
   }
 
+  postReservation() {
+    const data = { restaurantID: this.state.restaurantID, date: this.state.selectedDay };
+    $.post('/reservations', data, () => {
+      console.log('Posted reservation to database');
+    });
+  }
+
   render() {
     return (
       <AppWrapper>
@@ -178,7 +216,7 @@ class App extends React.Component {
         <DateSelector selectedDate={this.state.selectedDate} setSelectedDate={this.setSelectedDate} thisMonth={this.state.days} nextMonth={this.state.nextDays} today={this.state.today} nextMoment={this.state.nextMonth}/>
         <TimeSelector timeOptions={this.state.timeOptions} setSelectedTime={this.setSelectedTime} />
         <PartySelector setSelectedPartySize={this.setSelectedPartySize} />
-        <ReserveButton />
+        <ReserveButton postReservation={this.postReservation} />
       </AppWrapper>
     );
   }
@@ -187,10 +225,12 @@ class App extends React.Component {
 App.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   newDate: PropTypes.object, /* Should be a Date object */
+  restaurantID: PropTypes.number,
 };
 
 App.defaultProps = {
   newDate: moment(),
+  restaurantID: 1,
 };
 
 export default App;
