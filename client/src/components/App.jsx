@@ -45,11 +45,11 @@ class App extends React.Component {
     this.getAvailability = this.getAvailability.bind(this);
     this.setAvailability = this.setAvailability.bind(this);
     this.postReservation = this.postReservation.bind(this);
+    this.checkAvailability = this.checkAvailability.bind(this);
   }
 
   componentDidMount() {
     this.setTimeOptions(this.state.selectedDate.format('h:mm a'));
-    this.setDays(this.state.selectedDate, this.state.today);
     this.getAvailability();
   }
 
@@ -78,7 +78,9 @@ class App extends React.Component {
 
   setAvailability(results) {
     const unavailable = results.map((time) => moment(time.date_time));
-    this.setState((state) => ({ ...state, unavailable }));
+    this.setState((state) => ({ ...state, unavailable }), () => {
+      this.setDays(this.state.selectedDate, this.state.today);
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -104,7 +106,15 @@ class App extends React.Component {
     return timeOptions;
   }
 
-  setDays(selectedDate, currentDate) {
+  // eslint-disable-next-line react/sort-comp
+  checkAvailability(queryMoment) {
+    return this.state.unavailable.filter((unavailableDay) => {
+      return unavailableDay.format('l') === queryMoment.format('l');
+    });
+  }
+
+
+  setDays(selectedDate = this.selectedDate, currentDate = this.state.today) {
     const prevDays = []; // will capture all overflow days from prev month
     const currDays = []; // will capture all days from current month
     const nextDays = []; // will capture all overflow days from next month
@@ -127,8 +137,8 @@ class App extends React.Component {
     const todaysDate = currentDate.date();
     const zeroPad = (num) => `0${num.toString()}`;
 
-    const Day = (disabled, otherMonth, date, available, selected, year, month) => ({
-      disabled, otherMonth, date, available, selected, year, month,
+    const Day = (disabled, otherMonth, date, unavailable, selected, year, month) => ({
+      disabled, otherMonth, date, unavailable, selected, year, month,
     });
     // Add previous Days
     for (let i = daysInLastMonth - firstDayIndex; i < daysInLastMonth; i += 1) {
@@ -145,7 +155,7 @@ class App extends React.Component {
       } else if (i === selectedDay) {
         currDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, null, true, currentDate.format('YYYY'), currentDate.format('MM')));
       } else {
-        currDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, null, false, currentDate.format('YYYY'), currentDate.format('MM')));
+        currDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, this.checkAvailability(moment(`${currentDate.format('YYYY')}-${currentDate.format('MMMM')}-${i}`)), false, currentDate.format('YYYY'), currentDate.format('MM')));
       }
     }
     // Add current Days for next month
@@ -155,12 +165,12 @@ class App extends React.Component {
       } else if (i > nextMonth.date()) {
         nextMonthDays.push(Day(true, false, i < 10 ? zeroPad(i) : i, null, false, nextMonth.format('YYYY'), nextMonth.format('MM')));
       } else {
-        nextMonthDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, null, false, nextMonth.format('YYYY'), nextMonth.format('MM')));
+        nextMonthDays.push(Day(false, false, i < 10 ? zeroPad(i) : i, this.checkAvailability(moment(`${nextMonth.format('YYYY')}-${nextMonth.format('MMMM')}-${i}`)), false, nextMonth.format('YYYY'), nextMonth.format('MM')));
       }
     }
     // Add next Days
     for (let i = 1; i < 7 - lastDayIndex; i += 1) {
-      nextDays.push(Day(false, true, i < 10 ? zeroPad(i) : i, null, false, nextMonth.format('YYYY'), nextMonth.format('MM')));
+      nextDays.push(Day(false, true, i < 10 ? zeroPad(i) : i, this.checkAvailability(moment(`${nextMonth.format('YYYY')}-${nextMonth.format('MMMM')}-${i}`)), false, nextMonth.format('YYYY'), nextMonth.format('MM')));
     }
     // Add next Days for next month
     for (let i = 1; i < 7 - lastDayNextMonthIndex; i += 1) {
