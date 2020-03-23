@@ -20,13 +20,13 @@ const SelectWrapper = styled.div`
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 `;
 
-const DateSelector = ({ selectedDate, setSelectedDate, thisMonth, nextMonth, today}) => {
+const DateSelector = ({ selectedDate, setSelectedDate, thisMonth, nextMonth, today, nextMoment}) => {
   const [calendar, setCalendar] = useState(false);
 
   return (
     <SelectWrapper onClick={() => { setCalendar(!calendar); }}>
       { `${selectedDate.format('ddd')}, ${selectedDate.format('MMM')} ${selectedDate.format('D')}` }
-      { calendar ? <Calendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} thisMonth={thisMonth} nextMonth={nextMonth} currentDate={today} /> : null }
+      { calendar ? <Calendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} thisMonth={thisMonth} nextMonth={nextMonth} currentDate={today} nextMoment={nextMoment}/> : null }
     </SelectWrapper>
   );
 };
