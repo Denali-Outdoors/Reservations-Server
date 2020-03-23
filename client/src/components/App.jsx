@@ -28,6 +28,7 @@ class App extends React.Component {
       timeOptions: [],
       days: [],
       nextDays: [],
+      unavailable: [],
       months: moment.months(),
       today: newDate,
       selectedDate: newDate,
@@ -76,7 +77,8 @@ class App extends React.Component {
   }
 
   setAvailability(results) {
-    this.setState((state) => ({ ...state, availability: results }));
+    const unavailable = results.map((time) => moment(time.date_time));
+    this.setState((state) => ({ ...state, unavailable }));
   }
 
   // eslint-disable-next-line class-methods-use-this
